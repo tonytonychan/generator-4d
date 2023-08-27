@@ -31,7 +31,7 @@ const fetch_bet_2D_player = async (params: FetchBet2dPlayerParams) => {
 
   while (berhasil) {
     randomChalk(
-      `Fetching data di pasaran ${pasaran} di ${website} page ke ${page}`
+      `Fetching data bet 2D di pasaran ${pasaran} di ${website} page ke ${page}`
     );
 
     const has_new_data = [];

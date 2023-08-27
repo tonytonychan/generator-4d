@@ -12,9 +12,6 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const pasaran_query = req.query.pasaran_query as string
   const match_query = req.query.match_query as string
 
-  // await Result.deleteMany({ pasaran: pasaran_query })
-  // randomChalk(`deleted currently saved prediksi data for ${pasaran_query}`)
-
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
 

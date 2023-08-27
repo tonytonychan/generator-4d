@@ -33,11 +33,23 @@ const fetch_all_bet_controller: RequestHandler = async (req, res) => {
       website: website.website,
       kode_pasar: website.pasaran,
     })
+
+    await IDN.fetch_bet_3D_player({
+      phpsessid,
+      base_URL: website.baseURL,
+      pasaran,
+      website: website.website,
+      kode_pasar: website.pasaran,
+    })
+
+    await IDN.fetch_bet_4D_player({
+      phpsessid,
+      base_URL: website.baseURL,
+      pasaran,
+      website: website.website,
+      kode_pasar: website.pasaran,
+    })
   }
-
-  //! fetch_bet_3D_player
-
-  //! fetch_bet_4D_player
 
   randomChalk(`Fetching data semua website Selesai`)
   res.status(200).json({ message: 'Berhasil fetch data bet Players' })
