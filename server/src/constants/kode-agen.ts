@@ -8,12 +8,12 @@ export type KodeAgen =
   | 'kpqaa'
   | 'kpraa'
   | 'kxnaa'
-  | 'wbraa'
-  | 'wdtaa'
-  | 'wqeaa'
-  | 'wbsaa'
-  | 'wbqaa'
-  | 'wnbaa';
+  // | 'wbraa'
+  // | 'wdtaa'
+  // | 'wqeaa'
+  // | 'wbsaa'
+  // | 'wbqaa'
+  // | 'wnbaa';
 
 export enum KodeAgenIDN {
   PUB = 'vnsaa',

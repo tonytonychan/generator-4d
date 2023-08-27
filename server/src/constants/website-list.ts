@@ -324,8 +324,8 @@ export const website_list: Website[] = [
 export const website_pay4D = {
   NOMOR: {
     kodeWebsite: 'mimin.admnomorslot.com',
-    // username: 'nsrbn',
-    // password: 'rbn123',
+    username: 'nsrbn',
+    password: 'rbn123',
     pasaran: {
       BANGKOK: 'BANS-546',
       BRAZIL: '',
@@ -358,8 +358,8 @@ export const website_pay4D = {
 
   ESMI: {
     kodeWebsite: 'mimin.adminesmislot.com',
-    // username: 'esrbn',
-    // password: 'rbn123',
+    username: 'esrbn',
+    password: 'rbn123',
     pasaran: {
       BANGKOK: '',
       BRAZIL: '',
