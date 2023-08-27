@@ -10,30 +10,35 @@ const get_highest_profit_number_controller = async (
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
 
-    const data = await Result.aggregate([
-      {
-        $match: {
-          pasaran: pasaran_query,
-        },
+  const data = await Result.aggregate([
+    {
+      $match: {
+        pasaran: pasaran_query,
       },
-      {
-        $group: {
-          _id: "$pasaran",
-          angka_keluar: { $first: "$angka_keluar" },
-          total_omset: { $sum: "$total_omset" },
-          details: { $push: "$detail" }
-        },
+    },
+    {
+      $group: {
+        _id: { pasaran: '$pasaran', angka_keluar: '$angka_keluar' },
+        angka_keluar: { $first: '$angka_keluar' },
+        total_omset: { $sum: '$total_omset' },
+        details: { $push: '$detail' },
       },
-      {
-        $project: {
-          _id: 0,
-          pasaran: "$_id",
-          angka_keluar: 1,
-          total_omset: 1,
-          details: 1 // In
-        },
+    },
+    {
+      $project: {
+        _id: 0,
+        pasaran: '$_id.pasaran',
+        angka_keluar: '$_id.angka_keluar',
+        total_omset: 1,
+        details: 1,
       },
-    ]);
+    },
+    {
+      $sort: {
+        total_omset: -1, // Sort in descending order
+      },
+    },
+  ])
 
   res.status(200).send({ message: 'Berhasil mendapat angka pasaran', data })
 }
