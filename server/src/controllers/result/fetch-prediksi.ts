@@ -6,17 +6,14 @@ import generate_4d_array from '../../services/generator/generate-4d-array'
 import * as IDN from '../../services/idn'
 import get_prediksi_result from '../../services/idn/prediksi'
 import get_random_data from '../../utils/get-random-data'
-import { body } from 'express-validator'
 import { return_plain_num } from '../../utils/return-plain-num'
 
-export const fetch_prediksi_validator = [
-  body('pasaran_query').isString().withMessage('pasaran_query must be a string'),
-  body('match_query').isString().withMessage('match_query must be a string'),
-]
-
 const fetch_prediksi_controller = async (req: Request, res: Response) => {
-  const pasaran_query = req.query.pasaran as string
+  const pasaran_query = req.query.pasaran_query as string
   const match_query = req.query.match_query as string
+
+  // await Result.deleteMany({ pasaran: pasaran_query })
+  // randomChalk(`deleted currently saved prediksi data for ${pasaran_query}`)
 
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
@@ -50,7 +47,7 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       base_URL: website.baseURL,
     })
 
-    const { hasil } = await get_prediksi_result({
+    const { hasil, detail } = await get_prediksi_result({
       angka_prediksi: angka_prediksi.map(num => num.toString()),
       periode,
       kode_pasaran: website.pasaran,
@@ -58,12 +55,14 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       baseURL: website.baseURL,
     })
 
+    detail['website'] = website.website
+
     const new_prediksi_data = Result.build({
       angka_keluar: angka_prediksi.map(num => num.toString()),
       hasil: return_plain_num(hasil),
       pasaran: pasaran_query,
-      total_omset: 0,
-      detail_set: {},
+      total_omset: detail['Total Omset'] ? +detail['Total Omset'] : 0,
+      detail: detail,
     })
 
     await new_prediksi_data.save()
@@ -71,7 +70,9 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
     randomChalk('Berhasil menyimpan data prediksi')
   }
 
-  res.status(200).json({ message: 'Berhasil fetch data prediksi' })
+  res
+    .status(200)
+    .json({ message: 'Berhasil fetch data prediksi', data: angka_prediksi })
 }
 
 export default fetch_prediksi_controller

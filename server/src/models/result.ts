@@ -6,7 +6,7 @@ interface ResultAttrs {
   hasil: number;
   pasaran: string;
   total_omset: number;
-  detail_set: object;
+  detail: object;
 }
 
 interface ResultDoc extends Document {
@@ -14,7 +14,7 @@ interface ResultDoc extends Document {
   hasil: number;
   pasaran: string;
   total_omset: number;
-  detail_set: object;
+  detail: object;
 }
 
 interface ResultModel extends Model<ResultDoc> {
@@ -27,7 +27,7 @@ const Result_schema = new Schema(
     hasil: { type: Number, required: true },
     pasaran: { type: String, required: true },
     total_omset: { type: Number, required: true },
-    detail_set: { type: Object, required: true },
+    detail: { type: Object, required: true },
   },
   {
     timestamps: true,

@@ -1,16 +1,12 @@
 import { RequestHandler } from 'express'
-import { body } from 'express-validator'
 import { randomChalk } from 'ody-utils'
 import { website_list } from '../../constants/website-list'
 import { Bet } from '../../models/bet'
 import * as IDN from '../../services/idn'
 
-const fetch_all_bet_validator = [
-  body('pasaran').isString().withMessage('pasaran must be a string'),
-]
-
 const fetch_all_bet_controller: RequestHandler = async (req, res) => {
-  const pasaran = req.body.pasaran.toString().toUpperCase()
+  if (!req.query.pasaran) throw new Error('Please provide a pasaran query')
+  const pasaran = req.query.pasaran.toString().toUpperCase()
 
   await Bet.deleteMany({ pasaran })
   randomChalk(`deleted currently saved bet data for ${pasaran}`)
@@ -47,4 +43,4 @@ const fetch_all_bet_controller: RequestHandler = async (req, res) => {
   res.status(200).json({ message: 'Berhasil fetch data bet Players' })
 }
 
-export { fetch_all_bet_controller, fetch_all_bet_validator }
+export default fetch_all_bet_controller

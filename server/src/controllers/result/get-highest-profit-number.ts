@@ -1,63 +1,39 @@
 import { Response, Request } from 'express'
 import Result from '../../models/result'
-import { body } from 'express-validator'
 
-export const get_highest_profit_validator = [
-  body('pasaran_query')
-    .isString()
-    .withMessage('pasaran_query must be a string'),
-]
-
-const get_highest_profit_number_controller = async (req: Request, res: Response) => {
-  const pasaran_query = req.query.pasaran
+const get_highest_profit_number_controller = async (
+  req: Request,
+  res: Response
+) => {
+  const pasaran_query = req.query.pasaran_query
 
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
 
-  const data = await Result.aggregate([
-    {
-      $group: {
-        _id: '$website',
-        maxPeriode: { $max: '$periode' },
-      },
-    },
-    {
-      $lookup: {
-        from: 'results', // Replace with the actual collection name
-        let: { website: '$_id', maxPeriode: '$maxPeriode' },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $and: [
-                  { $eq: ['$website', '$$website'] },
-                  { $eq: ['$periode', '$$maxPeriode'] },
-                ],
-              },
-            },
-          },
-        ],
-        as: 'latestData',
-      },
-    },
-    {
-      $unwind: '$latestData',
-    },
-    {
-      $replaceRoot: { newRoot: '$latestData' },
-    },
-    {
-      $group: {
-        _id: {
-          website: '$website',
-          detail: '$detail',
+    const data = await Result.aggregate([
+      {
+        $match: {
+          pasaran: pasaran_query,
         },
-        angka_keluar: { $push: '$angka_keluar' },
-        hasil: { $sum: '$hasil' },
-        total_omset: { $sum: { $toDouble: '$detail.Total Omset' } },
       },
-    },
-  ])
+      {
+        $group: {
+          _id: "$pasaran",
+          angka_keluar: { $first: "$angka_keluar" },
+          total_omset: { $sum: "$total_omset" },
+          details: { $push: "$detail" }
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          pasaran: "$_id",
+          angka_keluar: 1,
+          total_omset: 1,
+          details: 1 // In
+        },
+      },
+    ]);
 
   res.status(200).send({ message: 'Berhasil mendapat angka pasaran', data })
 }
