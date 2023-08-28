@@ -28,6 +28,13 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
     match_query,
   })
 
+  const angka_prediksi_array = []
+
+  for (let i = 0; i < 9; i) {
+    const angka_prediksi = get_random_data(array_to_check)
+    angka_prediksi_array.push(angka_prediksi)
+  }
+
   for (const website of filtered_website_list) {
     const { phpsessid: PHPSESSID } = await IDN.login({
       username: website.username,
@@ -41,10 +48,7 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       PHPSESSID,
       base_URL: website.baseURL,
     })
-
-    for (let i = 0; i < 9; i++) {
-      const angka_prediksi = get_random_data(array_to_check)
-
+    for (const angka_prediksi of angka_prediksi_array) {
       const { hasil, detail } = await get_prediksi_result({
         angka_prediksi: angka_prediksi.map(num => num.toString()),
         periode,
@@ -64,9 +68,10 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       })
 
       await new_prediksi_data.save()
+
+      randomChalk('Berhasil menyimpan data prediksi')
     }
   }
-  randomChalk('Berhasil menyimpan data prediksi')
 
   res.status(200).json({ message: 'Berhasil fetch data prediksi' })
 }
