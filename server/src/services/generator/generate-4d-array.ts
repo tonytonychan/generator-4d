@@ -1,3 +1,4 @@
+import { randomChalk } from 'ody-utils'
 import { Bet } from '../../models/bet'
 import {
   one_digit_generate_number_array,
@@ -71,7 +72,6 @@ const generate_4d_array = async ({
   })
 
   const bet_2d_array = remove_2d_kembar(least_bet_2d)
-  console.log({ bet_2d_array })
 
   if (bet_2d_array.length < 3)
     throw new Error('Not enough data generated for 2D')
@@ -113,8 +113,7 @@ const generate_4d_array = async ({
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
-  console.log({ jumlah4dgenerated: generated_4d.length })
-  console.log({ generated_4d })
+  randomChalk(`Jumlah 4D yang tergenerated : `, generated_4d.length)
 
   return generated_4d
 }
