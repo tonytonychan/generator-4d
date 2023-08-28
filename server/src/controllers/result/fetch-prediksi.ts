@@ -28,8 +28,6 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
     match_query,
   })
 
-  const angka_prediksi = get_random_data(array_to_check)
-
   for (const website of filtered_website_list) {
     const { phpsessid: PHPSESSID } = await IDN.login({
       username: website.username,
@@ -44,32 +42,33 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       base_URL: website.baseURL,
     })
 
-    const { hasil, detail } = await get_prediksi_result({
-      angka_prediksi: angka_prediksi.map(num => num.toString()),
-      periode,
-      kode_pasaran: website.pasaran,
-      PHPSESSID,
-      baseURL: website.baseURL,
-    })
+    for (let i = 0; i < 9; i++) {
+      const angka_prediksi = get_random_data(array_to_check)
 
-    detail['website'] = website.website
+      const { hasil, detail } = await get_prediksi_result({
+        angka_prediksi: angka_prediksi.map(num => num.toString()),
+        periode,
+        kode_pasaran: website.pasaran,
+        PHPSESSID,
+        baseURL: website.baseURL,
+      })
 
-    const new_prediksi_data = Result.build({
-      angka_keluar: angka_prediksi.map(num => num.toString()),
-      hasil: return_plain_num(hasil),
-      pasaran: pasaran_query,
-      total_omset: detail['Total Omset'] ? +detail['Total Omset'] : 0,
-      detail: detail,
-    })
+      detail['website'] = website.website
 
-    await new_prediksi_data.save()
+      const new_prediksi_data = Result.build({
+        angka_keluar: angka_prediksi.map(num => num.toString()),
+        hasil: return_plain_num(hasil),
+        pasaran: pasaran_query,
+        total_omset: detail['Total Omset'] ? +detail['Total Omset'] : 0,
+        detail: detail,
+      })
 
-    randomChalk('Berhasil menyimpan data prediksi')
+      await new_prediksi_data.save()
+    }
   }
+  randomChalk('Berhasil menyimpan data prediksi')
 
-  res
-    .status(200)
-    .json({ message: 'Berhasil fetch data prediksi', data: angka_prediksi })
+  res.status(200).json({ message: 'Berhasil fetch data prediksi' })
 }
 
 export default fetch_prediksi_controller
