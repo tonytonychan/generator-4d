@@ -22,6 +22,7 @@ const get_highest_profit_number_controller = async (
         angka_keluar: { $first: '$angka_keluar' },
         total_omset: { $sum: '$total_omset' },
         details: { $push: '$detail' },
+        hasil: { $sum: '$hasil' },
       },
     },
     {
@@ -30,13 +31,17 @@ const get_highest_profit_number_controller = async (
         pasaran: '$_id.pasaran',
         angka_keluar: '$_id.angka_keluar',
         total_omset: 1,
-        details: 1,
+        hasil: 1,
+        details: '$details',
       },
     },
     {
       $sort: {
-        total_omset: -1, // Sort in descending order
+        hasil: -1,
       },
+    },
+    {
+      $limit: 3,
     },
   ])
 
