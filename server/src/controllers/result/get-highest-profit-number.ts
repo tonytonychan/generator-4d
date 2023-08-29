@@ -41,7 +41,7 @@ const get_highest_profit_number_controller = async (
       },
     },
     {
-      $limit: 3,
+      $limit: 10
     },
   ])
 
