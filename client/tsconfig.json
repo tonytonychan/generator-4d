@@ -22,5 +22,5 @@
   },
   "include": [
     "src"
-  ]
+, "src/types/kode-website.ts", "src/types/.kode-website.hasil-hoki.ts", "src/types/pasaran.hasil-hoki.ts"  ]
 }

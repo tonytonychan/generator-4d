@@ -16,7 +16,7 @@ app.use(cookieSession({ signed: false, secure: false }));
 app.use(current_user);
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 
-app.use('/api/v1', router_v1);
+app.use('/api/', router_v1);
 app.all('/api/**', () => {
   throw new NotFoundError('route not found');
 });
