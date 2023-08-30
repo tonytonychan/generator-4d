@@ -80,7 +80,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 3) {
+    if (pushed_2d_number_quantity >= 10) {
       break
     }
 
@@ -115,7 +115,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 3) {
+    if (pushedCount3D >= 10) {
       break
     }
 
@@ -154,7 +154,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   let pushedCount4D = 0
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
-    if (pushedCount4D >= 10) {
+    if (pushedCount4D >= 20) {
       break
     }
 
