@@ -1,17 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import LoadingIndicator from './Components/LoadingIndicator/LoadingIndicator'
+import { Helmet } from 'react-helmet'
 
 function App() {
-  // const [match_query, set_match_query] = useState<string>('')
   const [tableData, setTableData] = useState<any[]>([])
   const [selectedPasaran, setSelectedPasaran] = useState<string>('Bangkok')
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-
-  // const handleMatchQueryInputChange = (event: any) => {
-  //   set_match_query(event.target.value)
-  // }
 
   const handleTarikDataButton = useCallback(async () => {
     if (isLoading) return
@@ -49,7 +45,7 @@ function App() {
       setIsLoading(false)
       setIsFetching(false)
     }
-  }, [selectedPasaran/* , match_query */, isLoading])
+  }, [selectedPasaran, isLoading])
 
   const handleClearData = useCallback(async () => {
     if (isLoading) return
@@ -103,8 +99,11 @@ function App() {
 
   return (
     <div className='App'>
+      <Helmet>
+      <title>{`[ Live - GENERATOR 4D] - DASHBOARD`}</title>
+      </Helmet>
       <header className='bg-blue-500 p-4 text-white'>
-        <h1 className='text-2xl'>GENERATOR 4D(BETA)</h1>
+        <h1 className='text-2xl'>GENERATOR 4D</h1>
       </header>
       <select
         value={selectedPasaran}
@@ -136,13 +135,6 @@ function App() {
         <option value='TimorLeste'>TimorLeste</option>
         <option value='Vietnam'>Vietnam</option>
       </select>
-      {/* <input
-        type='text'
-        value={match_query}
-        onChange={handleMatchQueryInputChange}
-        className='mt-4 border p-2 mr-4 rounded-lg border-gray-200 focus:bg-green-50 hover:bg-green-100'
-        placeholder='Input match query ...'
-      /> */}
 
       <button
         onClick={handleTarikDataButton}
