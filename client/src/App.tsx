@@ -2,16 +2,16 @@ import { useCallback, useEffect, useState } from 'react'
 import LoadingIndicator from './Components/LoadingIndicator/LoadingIndicator'
 
 function App() {
-  const [match_query, set_match_query] = useState<string>('')
+  // const [match_query, set_match_query] = useState<string>('')
   const [tableData, setTableData] = useState<any[]>([])
   const [selectedPasaran, setSelectedPasaran] = useState<string>('Bangkok')
   const [isLoading, setIsLoading] = useState(false)
   const [isFetching, setIsFetching] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
-  const handleMatchQueryInputChange = (event: any) => {
-    set_match_query(event.target.value)
-  }
+  // const handleMatchQueryInputChange = (event: any) => {
+  //   set_match_query(event.target.value)
+  // }
 
   const handleTarikDataButton = useCallback(async () => {
     if (isLoading) return
@@ -37,7 +37,7 @@ function App() {
     try {
       setIsFetching(true)
       const response = await fetch(
-        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}&match_query=${match_query}`
+        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}`
       )
       const res = await response.json()
       if (!response.ok) throw new Error(res.message)
@@ -49,7 +49,7 @@ function App() {
       setIsLoading(false)
       setIsFetching(false)
     }
-  }, [selectedPasaran, match_query, isLoading])
+  }, [selectedPasaran/* , match_query */, isLoading])
 
   const handleClearData = useCallback(async () => {
     if (isLoading) return
@@ -136,13 +136,13 @@ function App() {
         <option value='TimorLeste'>TimorLeste</option>
         <option value='Vietnam'>Vietnam</option>
       </select>
-      <input
+      {/* <input
         type='text'
         value={match_query}
         onChange={handleMatchQueryInputChange}
         className='mt-4 border p-2 mr-4 rounded-lg border-gray-200 focus:bg-green-50 hover:bg-green-100'
         placeholder='Input match query ...'
-      />
+      /> */}
 
       <button
         onClick={handleTarikDataButton}

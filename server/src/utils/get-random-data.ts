@@ -1,20 +1,20 @@
-function get_random_data(array: any[]) {
-  const random_data: number[] = [];
+function generate_random_data_array(array: any[]) {
+  const random_data_array: any[][] = []
 
-  while (random_data.length < 3) {
-    const random_index = Math.floor(Math.random() * array.length);
-    const random_element = array[random_index];
+  for (const item of array) {
+    const firstElement = item
+    const remainingArray = array.filter(e => e !== firstElement)
 
-    const thirdChar = random_element[2]; // Get the third character
-    const fourthChar = random_element[3]; // Get the fourth character
+    const randomIndex1 = Math.floor(Math.random() * remainingArray.length)
+    const randomIndex2 = Math.floor(Math.random() * remainingArray.length)
 
-    // Check if third and fourth characters are not the same
-    if (thirdChar !== fourthChar && !random_data.includes(random_element)) {
-      random_data.push(random_element);
-    }
+    const secondElement = remainingArray[randomIndex1]
+    const thirdElement = remainingArray[randomIndex2]
+
+    random_data_array.push([firstElement, secondElement, thirdElement])
   }
 
-  return random_data;
+  return random_data_array
 }
 
-export default get_random_data;
+export default generate_random_data_array

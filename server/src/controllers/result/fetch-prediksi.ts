@@ -10,13 +10,9 @@ import { return_plain_num } from '../../utils/return-plain-num'
 
 const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const pasaran_query = req.query.pasaran_query as string
-  const match_query = req.query.match_query as string
 
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
-
-  if (!match_query)
-    throw new Error('Please provide match_query as a query value!')
 
   const filtered_website_list = IDN.convert_string_to_kode_pasar({
     data_array: website_list,
@@ -25,10 +21,12 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
 
   const array_to_check = await generate_4d_array({
     pasaran: pasaran_query,
-    match_query,
   })
+  console.log({ array_to_check })
 
   const angka_prediksi = get_random_data(array_to_check)
+
+  console.log({ angka_prediksi })
 
   for (const website of filtered_website_list) {
     const { phpsessid: PHPSESSID } = await IDN.login({
@@ -44,25 +42,27 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
       base_URL: website.baseURL,
     })
 
-    const { hasil, detail } = await get_prediksi_result({
-      angka_prediksi: angka_prediksi.map(num => num.toString()),
-      periode,
-      kode_pasaran: website.pasaran,
-      PHPSESSID,
-      baseURL: website.baseURL,
-    })
+    for (const arr_of_three_4d_digit of angka_prediksi) {
+      const { hasil, detail } = await get_prediksi_result({
+        angka_prediksi: arr_of_three_4d_digit.map(num => num.toString()),
+        periode,
+        kode_pasaran: website.pasaran,
+        PHPSESSID,
+        baseURL: website.baseURL,
+      })
 
-    detail['website'] = website.website
+      detail['website'] = website.website
 
-    const new_prediksi_data = Result.build({
-      angka_keluar: angka_prediksi.map(num => num.toString()),
-      hasil: return_plain_num(hasil),
-      pasaran: pasaran_query,
-      total_omset: detail['Total Omset'] ? +detail['Total Omset'] : 0,
-      detail: detail,
-    })
+      const new_prediksi_data = Result.build({
+        angka_keluar: arr_of_three_4d_digit.map(num => num.toString()),
+        hasil: return_plain_num(hasil),
+        pasaran: pasaran_query,
+        total_omset: detail['Total Omset'] ? +detail['Total Omset'] : 0,
+        detail: detail,
+      })
 
-    await new_prediksi_data.save()
+      await new_prediksi_data.save()
+    }
 
     randomChalk('Berhasil menyimpan data prediksi')
   }

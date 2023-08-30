@@ -4,18 +4,12 @@ import {
   one_digit_generate_number_array,
   two_digit_generate_number_array,
 } from '../../utils/generate-array-number'
-import remove_2d_kembar from '../../utils/remove-2d-kembar'
 
 interface Generate4DArrrayParams {
   pasaran: string
-  match_query: string
 }
 
-const generate_4d_array = async ({
-  pasaran,
-  match_query,
-}: Generate4DArrrayParams) => {
-  const least_bet_2d: string[] = []
+const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   const array_3d_to_check: any[] = []
   const array_4d_to_check: any[] = []
   const all_bet_data_2d: any[] = []
@@ -63,39 +57,84 @@ const generate_4d_array = async ({
     all_bet_data_4d.push(...array_all_bet_4d)
   }
 
+  const generated_2d: any[] = []
+  const generated_3d: any[] = []
+  const generated_4d: any[] = []
+
+  const matchesMap2D = new Map()
+  const matchesMap3D = new Map()
+  const matchesMap4D = new Map()
+
+  //! FILTER 2D
+
   two_digit_number_array.forEach(number => {
     const matches = all_bet_data_2d.filter(item => item == number).length
 
-    if (matches < +match_query) {
-      least_bet_2d.push(number)
-    }
+    matchesMap2D.set(number, matches)
   })
 
-  const bet_2d_array = remove_2d_kembar(least_bet_2d)
+  const sorted_from_matches_2d = [...matchesMap2D.entries()].sort(
+    (a, b) => a[1] - b[1]
+  )
 
-  if (bet_2d_array.length < 3)
+  let pushed_2d_number_quantity = 0
+
+  for (let i = 0; i < sorted_from_matches_2d.length; i++) {
+    if (pushed_2d_number_quantity >= 3) {
+      break
+    }
+
+    const current_number_index = sorted_from_matches_2d[i][0]
+
+    if (current_number_index[0] !== current_number_index[1]) {
+      generated_2d.push(current_number_index)
+      pushed_2d_number_quantity++
+    }
+  }
+
+  if (generated_2d.length < 3)
     throw new Error('Not enough data generated for 2D')
 
-  for (const item of bet_2d_array) {
+  //! FILTER 3D
+
+  for (const item of generated_2d) {
     for (const item2 of one_digit_number_array) {
       array_3d_to_check.push(item2 + item)
     }
   }
 
-  const generated_3d: any[] = []
-
   array_3d_to_check.forEach(number => {
     const matches = all_bet_data_3d.filter(item => item == number).length
 
-    if (matches <= 1) {
-      generated_3d.push(number)
-    }
+    matchesMap3D.set(number, matches)
   })
+
+  const sortedMatches3D = [...matchesMap3D.entries()].sort(
+    (a, b) => a[1] - b[1]
+  )
+
+  let pushedCount3D = 0
+  for (let i = 0; i < sortedMatches3D.length; i++) {
+    if (pushedCount3D >= 3) {
+      break
+    }
+
+    const currentNumber = sortedMatches3D[i][0]
+
+    if (
+      currentNumber[0] !== currentNumber[1] &&
+      currentNumber[1] !== currentNumber[2] &&
+      currentNumber[0] !== currentNumber[2]
+    ) {
+      generated_3d.push(currentNumber)
+      pushedCount3D++
+    }
+  }
 
   if (generated_3d.length < 3)
     throw new Error('Not enough data generated for 3D')
 
-  const generated_4d: any[] = []
+  //! FILTER 4D
 
   for (const item of generated_3d) {
     for (const item2 of one_digit_number_array) {
@@ -105,15 +144,39 @@ const generate_4d_array = async ({
 
   array_4d_to_check.forEach(number => {
     const matches = all_bet_data_4d.filter(item => item == number).length
-
-    if (matches == 0) {
-      generated_4d.push(number)
-    }
+    matchesMap4D.set(number, matches)
   })
+
+  const sortedMatches4D = [...matchesMap4D.entries()].sort(
+    (a, b) => a[1] - b[1]
+  )
+
+  let pushedCount4D = 0
+
+  for (let i = 0; i < sortedMatches4D.length; i++) {
+    if (pushedCount4D >= 10) {
+      break
+    }
+
+    const currentNumber = sortedMatches4D[i][0]
+
+    if (
+      currentNumber[0] !== currentNumber[1] &&
+      currentNumber[1] !== currentNumber[2] &&
+      currentNumber[2] !== currentNumber[3] &&
+      currentNumber[0] !== currentNumber[2] &&
+      currentNumber[0] !== currentNumber[3] &&
+      currentNumber[1] !== currentNumber[3]
+    ) {
+      generated_4d.push(currentNumber)
+      pushedCount4D++
+    }
+  }
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
   randomChalk(`Jumlah 4D yang tergenerated : `, generated_4d.length)
+  randomChalk(`Angka 4D yang tergenerated : `, generated_4d)
 
   return generated_4d
 }
