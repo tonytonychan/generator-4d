@@ -22,11 +22,8 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const array_to_check = await generate_4d_array({
     pasaran: pasaran_query,
   })
-  console.log({ array_to_check })
 
   const angka_prediksi = get_random_data(array_to_check)
-
-  console.log({ angka_prediksi })
 
   for (const website of filtered_website_list) {
     const { phpsessid: PHPSESSID } = await IDN.login({

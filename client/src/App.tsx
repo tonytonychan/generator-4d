@@ -171,8 +171,8 @@ function App() {
           <thead>
             <tr>
               <th className='px-12'>Angka 1</th>
-              <th className='px-12'>Angka 2</th>
-              <th className='px-12'>Angka 3</th>
+              {/* <th className='px-12'>Angka 2</th>
+              <th className='px-12'>Angka 3</th> */}
               <th className='px-24'>Total Omset</th>
               <th className='px-24'>Profit</th>
               <th className='px-48'></th>
@@ -182,12 +182,12 @@ function App() {
             {tableData.map((data: any, index: any) => (
               <tr key={index}>
                 <td className='py-2 px-12'>{data.angka_keluar[0]}</td>
-                <td className='py-2 px-12'>{data.angka_keluar[1]}</td>
-                <td className='py-2 px-12'>{data.angka_keluar[2]}</td>
+                {/* <td className='py-2 px-12'>{data.angka_keluar[1]}</td>
+                <td className='py-2 px-12'>{data.angka_keluar[2]}</td> */}
                 <td className='py-2 px-24'>{data.total_omset}</td>
                 <td className='py-2 px-24'>{data.hasil}</td>
                 <td className='py-2 px-48'>
-                  <button className='bg-gray-200 p-1 rounded-lg disabled'>
+                  <button className='bg-gray-200 p-1 rounded-lg disabled w-24'>
                     See Detail
                   </button>
                 </td>
