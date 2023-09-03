@@ -7,9 +7,13 @@ import {
 
 interface Generate4DArrrayParams {
   pasaran: string
+  show_kembar: string
 }
 
-const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
+const generate_4d_array = async ({
+  pasaran,
+  show_kembar,
+}: Generate4DArrrayParams) => {
   const array_3d_to_check: any[] = []
   const array_4d_to_check: any[] = []
   const all_bet_data_2d: any[] = []
@@ -17,6 +21,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   const all_bet_data_4d: any[] = []
   const one_digit_number_array = one_digit_generate_number_array()
   const two_digit_number_array = two_digit_generate_number_array()
+  console.log({ show_kembar })
 
   const data_pasaran = await Bet.aggregate([
     {
@@ -80,7 +85,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 10) {
+    if (pushed_2d_number_quantity >= 30) {
       break
     }
 
@@ -115,7 +120,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 10) {
+    if (pushedCount3D >= 20) {
       break
     }
 
@@ -154,7 +159,7 @@ const generate_4d_array = async ({ pasaran }: Generate4DArrrayParams) => {
   let pushedCount4D = 0
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
-    if (pushedCount4D >= 20) {
+    if (pushedCount4D >= 30) {
       break
     }
 

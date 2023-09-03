@@ -10,6 +10,7 @@ import { return_plain_num } from '../../utils/return-plain-num'
 
 const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const pasaran_query = req.query.pasaran_query as string
+  const show_kembar = req.query.show_kembar as string
 
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
@@ -21,6 +22,7 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
 
   const array_to_check = await generate_4d_array({
     pasaran: pasaran_query,
+    show_kembar,
   })
 
   const angka_prediksi = get_random_data(array_to_check)
