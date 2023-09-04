@@ -227,7 +227,7 @@ const generate_4d_array = async ({
   randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
   randomChalk(`Angka 4D yang tergenerated : `, final_generated_number)
 
-  return generated_4d
+  return final_generated_number
 }
 
 export default generate_4d_array
