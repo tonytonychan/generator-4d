@@ -13,16 +13,13 @@ interface Generate4DArrrayParams {
 
 function hasInvalidChars(number: string[], targetStr: string) {
   const numStr = number.toString() // Convert the number to a string
-  console.log({ numStr })
 
   for (let i = 0; i < targetStr.length; i++) {
     if (numStr.includes(targetStr[i])) {
-      console.log('true')
-
       return true // Number contains an invalid character
     }
   }
-  console.log('false')
+
   return false // Number is valid
 }
 

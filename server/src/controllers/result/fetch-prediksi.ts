@@ -27,6 +27,8 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
 
   const angka_prediksi = get_random_data(array_to_check)
 
+  console.log({ angka_prediksi })
+
   for (const website of filtered_website_list) {
     const { phpsessid: PHPSESSID } = await IDN.login({
       username: website.username,
