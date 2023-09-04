@@ -11,17 +11,16 @@ interface Generate4DArrrayParams {
   show_kembar: string
 }
 
-function hasInvalidChars(number: string[], targetStr: string) {
+function hasInvalidChars(number: string, targetStr: string) {
   for (let i = 0; i < number.length; i++) {
-    if (targetStr.includes(number[i])) {
-      console.log({ targetStr, check: number[i] })
-
-      return true // Number contains an invalid character
+    for (let j = 0; j < targetStr.length; j++) {
+      if (targetStr[j].includes(number[i])) {
+        return true
+      }
     }
   }
-  console.log('valid')
 
-  return false // Number is valid
+  return false
 }
 
 const generate_4d_array = async ({
@@ -35,7 +34,6 @@ const generate_4d_array = async ({
   const all_bet_data_4d: any[] = []
   const one_digit_number_array = one_digit_generate_number_array()
   const two_digit_number_array = two_digit_generate_number_array()
-  console.log({ show_kembar })
 
   const data_pasaran = await Bet.aggregate([
     {
@@ -204,8 +202,6 @@ const generate_4d_array = async ({
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
-  console.log({ generated_4d })
-
   const result_semalam = await Semalam.findOne(
     { pasaran },
     { angka_keluar: 1, _id: 0 }
@@ -213,15 +209,16 @@ const generate_4d_array = async ({
 
   const angka_keluar = result_semalam?.angka_keluar
 
-  console.log({ angka_keluar })
-
   if (!angka_keluar)
     throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
 
   const final_generated_number = []
 
   for (let i = 0; i < generated_4d.length; i++) {
-    if (!hasInvalidChars(generated_4d[i], angka_keluar)) {
+    if (
+      !hasInvalidChars(generated_4d[i], angka_keluar) &&
+      final_generated_number.length < 10
+    ) {
       final_generated_number.push(generated_4d[i])
     }
   }
