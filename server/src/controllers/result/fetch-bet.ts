@@ -49,6 +49,14 @@ const fetch_all_bet_controller: RequestHandler = async (req, res) => {
       website: website.website,
       kode_pasar: website.pasaran,
     })
+
+    await IDN.fetch_bet_semalam_player({
+      phpsessid,
+      base_URL: website.baseURL,
+      pasaran,
+      website: website.website,
+      kode_pasar: website.pasaran,
+    })
   }
 
   randomChalk(`Fetching data semua website Selesai`)

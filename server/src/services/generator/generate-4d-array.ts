@@ -90,10 +90,14 @@ const generate_4d_array = async ({
     }
 
     const current_number_index = sorted_from_matches_2d[i][0]
-
-    if (current_number_index[0] !== current_number_index[1]) {
+    if (show_kembar === 'true') {
       generated_2d.push(current_number_index)
       pushed_2d_number_quantity++
+    } else {
+      if (current_number_index[0] !== current_number_index[1]) {
+        generated_2d.push(current_number_index)
+        pushed_2d_number_quantity++
+      }
     }
   }
 
@@ -126,13 +130,18 @@ const generate_4d_array = async ({
 
     const currentNumber = sortedMatches3D[i][0]
 
-    if (
-      currentNumber[0] !== currentNumber[1] &&
-      currentNumber[1] !== currentNumber[2] &&
-      currentNumber[0] !== currentNumber[2]
-    ) {
+    if (show_kembar === 'true') {
       generated_3d.push(currentNumber)
       pushedCount3D++
+    } else {
+      if (
+        currentNumber[0] !== currentNumber[1] &&
+        currentNumber[1] !== currentNumber[2] &&
+        currentNumber[0] !== currentNumber[2]
+      ) {
+        generated_3d.push(currentNumber)
+        pushedCount3D++
+      }
     }
   }
 
@@ -165,16 +174,21 @@ const generate_4d_array = async ({
 
     const currentNumber = sortedMatches4D[i][0]
 
-    if (
-      currentNumber[0] !== currentNumber[1] &&
-      currentNumber[1] !== currentNumber[2] &&
-      currentNumber[2] !== currentNumber[3] &&
-      currentNumber[0] !== currentNumber[2] &&
-      currentNumber[0] !== currentNumber[3] &&
-      currentNumber[1] !== currentNumber[3]
-    ) {
+    if (show_kembar === 'true') {
       generated_4d.push(currentNumber)
       pushedCount4D++
+    } else {
+      if (
+        currentNumber[0] !== currentNumber[1] &&
+        currentNumber[1] !== currentNumber[2] &&
+        currentNumber[2] !== currentNumber[3] &&
+        currentNumber[0] !== currentNumber[2] &&
+        currentNumber[0] !== currentNumber[3] &&
+        currentNumber[1] !== currentNumber[3]
+      ) {
+        generated_4d.push(currentNumber)
+        pushedCount4D++
+      }
     }
   }
 
