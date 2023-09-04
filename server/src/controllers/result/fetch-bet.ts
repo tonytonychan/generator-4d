@@ -3,6 +3,7 @@ import { randomChalk } from 'ody-utils'
 import { website_list } from '../../constants/website-list'
 import { Bet } from '../../models/bet'
 import * as IDN from '../../services/idn'
+import Semalam from '../../models/semalam'
 
 const fetch_all_bet_controller: RequestHandler = async (req, res) => {
   if (!req.query.pasaran) throw new Error('Please provide a pasaran query')
@@ -10,6 +11,9 @@ const fetch_all_bet_controller: RequestHandler = async (req, res) => {
 
   await Bet.deleteMany({ pasaran })
   randomChalk(`deleted currently saved bet data for ${pasaran}`)
+
+  await Semalam.deleteMany({ pasaran })
+  randomChalk(`deleted currently saved bet data keluaran semalam for ${pasaran}`)
 
   const filtered_website_list = IDN.convert_string_to_kode_pasar({
     data_array: website_list,
