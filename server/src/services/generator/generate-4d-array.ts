@@ -12,13 +12,14 @@ interface Generate4DArrrayParams {
 }
 
 function hasInvalidChars(number: string[], targetStr: string) {
-  const numStr = number.toString() // Convert the number to a string
+  for (let i = 0; i < number.length; i++) {
+    if (targetStr.includes(number[i])) {
+      console.log({ targetStr, check: number[i] })
 
-  for (let i = 0; i < targetStr.length; i++) {
-    if (numStr.includes(targetStr[i])) {
       return true // Number contains an invalid character
     }
   }
+  console.log('valid')
 
   return false // Number is valid
 }
