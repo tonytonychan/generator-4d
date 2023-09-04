@@ -216,10 +216,7 @@ const generate_4d_array = async ({
   const final_generated_number = []
 
   for (let i = 0; i < generated_4d.length; i++) {
-    if (
-      !hasInvalidChars(generated_4d[i], angka_keluar) &&
-      final_generated_number.length <= 10
-    ) {
+    if (!hasInvalidChars(generated_4d[i], angka_keluar)) {
       final_generated_number.push(generated_4d[i])
     }
   }
