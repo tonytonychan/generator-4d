@@ -4,10 +4,26 @@ import {
   one_digit_generate_number_array,
   two_digit_generate_number_array,
 } from '../../utils/generate-array-number'
+import Semalam from '../../models/semalam'
 
 interface Generate4DArrrayParams {
   pasaran: string
   show_kembar: string
+}
+
+function hasInvalidChars(number: string[], targetStr: string) {
+  const numStr = number.toString() // Convert the number to a string
+  console.log({ numStr })
+
+  for (let i = 0; i < targetStr.length; i++) {
+    if (numStr.includes(targetStr[i])) {
+      console.log('true')
+
+      return true // Number contains an invalid character
+    }
+  }
+  console.log('false')
+  return false // Number is valid
 }
 
 const generate_4d_array = async ({
@@ -85,19 +101,15 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 30) {
+    if (pushed_2d_number_quantity >= 50) {
       break
     }
 
     const current_number_index = sorted_from_matches_2d[i][0]
-    if (show_kembar === 'true') {
+
+    if (current_number_index[0] !== current_number_index[1]) {
       generated_2d.push(current_number_index)
       pushed_2d_number_quantity++
-    } else {
-      if (current_number_index[0] !== current_number_index[1]) {
-        generated_2d.push(current_number_index)
-        pushed_2d_number_quantity++
-      }
     }
   }
 
@@ -124,7 +136,7 @@ const generate_4d_array = async ({
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 20) {
+    if (pushedCount3D >= 100) {
       break
     }
 
@@ -168,7 +180,7 @@ const generate_4d_array = async ({
   let pushedCount4D = 0
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
-    if (pushedCount4D >= 30) {
+    if (pushedCount4D >= 100) {
       break
     }
 
@@ -194,8 +206,29 @@ const generate_4d_array = async ({
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
-  randomChalk(`Jumlah 4D yang tergenerated : `, generated_4d.length)
-  randomChalk(`Angka 4D yang tergenerated : `, generated_4d)
+  const result_semalam = await Semalam.findOne(
+    { pasaran },
+    { angka_keluar: 1, _id: 0 }
+  )
+
+  const angka_keluar = result_semalam?.angka_keluar
+
+  if (!angka_keluar)
+    throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
+
+  const final_generated_number = []
+
+  for (let i = 0; i < generated_4d.length; i++) {
+    if (
+      !hasInvalidChars(generated_4d[i], angka_keluar) &&
+      final_generated_number.length <= 10
+    ) {
+      final_generated_number.push(generated_4d[i])
+    }
+  }
+
+  randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
+  randomChalk(`Angka 4D yang tergenerated : `, final_generated_number)
 
   return generated_4d
 }
