@@ -180,7 +180,7 @@ const generate_4d_array = async ({
   let pushedCount4D = 0
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
-    if (pushedCount4D >= 1000) {
+    if (pushedCount4D >= 9999) {
       break
     }
 
