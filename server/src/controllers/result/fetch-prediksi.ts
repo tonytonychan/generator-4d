@@ -25,6 +25,8 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
     show_kembar,
   })
 
+  console.log({ array_to_check })
+
   const angka_prediksi = get_random_data(array_to_check)
 
   console.log({ angka_prediksi })

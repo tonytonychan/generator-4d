@@ -203,12 +203,16 @@ const generate_4d_array = async ({
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
+  console.log({ generated_4d })
+
   const result_semalam = await Semalam.findOne(
     { pasaran },
     { angka_keluar: 1, _id: 0 }
   )
 
   const angka_keluar = result_semalam?.angka_keluar
+
+  console.log({ angka_keluar })
 
   if (!angka_keluar)
     throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
