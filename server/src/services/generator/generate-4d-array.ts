@@ -134,7 +134,7 @@ const generate_4d_array = async ({
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 50) {
+    if (pushedCount3D >= 100) {
       break
     }
 
