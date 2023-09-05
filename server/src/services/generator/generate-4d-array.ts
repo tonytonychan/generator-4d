@@ -15,7 +15,7 @@ function hasInvalidChars(number: string, targetStr: string) {
   for (let i = 0; i < number.length; i++) {
     for (let j = 0; j < targetStr.length; j++) {
       if (targetStr[j].includes(number[i])) {
-        return true
+         return true
       }
     }
   }
@@ -97,9 +97,9 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 50) {
-      break
-    }
+    // if (pushed_2d_number_quantity >= 50) {
+    //   break
+    // }
 
     const current_number_index = sorted_from_matches_2d[i][0]
 
@@ -132,9 +132,9 @@ const generate_4d_array = async ({
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 100) {
-      break
-    }
+    // if (pushedCount3D >= 100) {
+    //   break
+    // }
 
     const currentNumber = sortedMatches3D[i][0]
 
@@ -176,9 +176,9 @@ const generate_4d_array = async ({
   let pushedCount4D = 0
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
-    if (pushedCount4D >= 9999) {
-      break
-    }
+    // if (pushedCount4D >= 9999) {
+    //   break
+    // }
 
     const currentNumber = sortedMatches4D[i][0]
 
@@ -216,8 +216,8 @@ const generate_4d_array = async ({
 
   for (let i = 0; i < generated_4d.length; i++) {
     if (
-      !hasInvalidChars(generated_4d[i], angka_keluar) &&
-      final_generated_number.length < 10
+      !hasInvalidChars(generated_4d[i], angka_keluar) /* &&
+      final_generated_number.length < 30 */
     ) {
       final_generated_number.push(generated_4d[i])
     }
