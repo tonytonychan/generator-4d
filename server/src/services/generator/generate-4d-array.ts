@@ -97,7 +97,7 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 30) {
+    if (pushed_2d_number_quantity >= 20) {
       break
     }
 
@@ -134,9 +134,9 @@ const generate_4d_array = async ({
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 100) {
-      break
-    }
+    // if (pushedCount3D >= 300) {
+    //   break
+    // }
 
     const currentNumber = sortedMatches3D[i][0]
 
