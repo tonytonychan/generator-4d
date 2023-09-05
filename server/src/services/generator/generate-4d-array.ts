@@ -97,7 +97,7 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 20) {
+    if (pushed_2d_number_quantity >= 30) {
       break
     }
 
