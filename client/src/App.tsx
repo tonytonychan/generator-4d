@@ -12,6 +12,19 @@ function App() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [show_twin, set_show_twin] = useState(false)
 
+  const [expandedRows, setExpandedRows] = useState(
+    Array(tableData.length).fill(false)
+  )
+
+  const toggleRowDetails = (index: any) => {
+    // Create a copy of the expandedRows array
+    const newExpandedRows = [...expandedRows]
+    // Toggle the value at the specified index
+    newExpandedRows[index] = !newExpandedRows[index]
+    // Update the state
+    setExpandedRows(newExpandedRows)
+  }
+
   const handleTarikDataButton = useCallback(async () => {
     if (isLoading) return
 
@@ -233,10 +246,6 @@ function App() {
             'Clear Data Prediksi'
           )}
         </button>
-
-        {/* <Switch.Label as='span' className='ml-3 mt-6 text-sm'>
-          <span className='font-medium text-gray-900'>kembar</span>
-        </Switch.Label> */}
       </Switch.Group>
       <div className='mt-4 border p-4'>
         <table>
@@ -247,6 +256,7 @@ function App() {
               <th className='px-12'>Angka 3</th> */}
               <th className='px-24'>Total Omset</th>
               <th className='px-24'>Profit</th>
+              <th className='px-24'>% Margin</th>
               <th className='px-48'></th>
             </tr>
           </thead>
@@ -258,11 +268,30 @@ function App() {
                 <td className='py-2 px-12'>{data.angka_keluar[2]}</td> */}
                 <td className='py-2 px-24'>{data.total_omset}</td>
                 <td className='py-2 px-24'>{data.hasil}</td>
+                <td className='py-2 px-24'>
+                  {Math.round((+data.hasil / +data.total_omset) * 100).toFixed(
+                    1
+                  )}
+                  %
+                </td>
                 <td className='py-2 px-48'>
-                  <button className='bg-gray-200 p-1 rounded-lg disabled w-24'>
+                  <button
+                    className='bg-gray-200 p-1 rounded-lg disabled w-24'
+                    onClick={() => toggleRowDetails(index)}
+                  >
                     See Detail
                   </button>
+                 
                 </td>
+                 {expandedRows[index] && (
+                    <td>
+                      <tr className='mt-2'>{data.total_omset}</tr>
+                      <tr className='mt-2'>{data.total_omset}</tr>
+                      <tr className='mt-2'>{data.total_omset}</tr>
+                      <tr className='mt-2'>{data.total_omset}</tr>
+                      <tr className='mt-2'>{data.total_omset}</tr>
+                    </td>
+                  )}
               </tr>
             ))}
           </tbody>
