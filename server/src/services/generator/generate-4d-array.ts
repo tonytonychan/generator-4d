@@ -93,11 +93,12 @@ const generate_4d_array = async ({
   const sorted_from_matches_2d = [...matchesMap2D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
+  console.log({ sorted_from_matches_2d })
 
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 40) {
+    if (pushed_2d_number_quantity >= 10) {
       break
     }
 
@@ -131,12 +132,13 @@ const generate_4d_array = async ({
   const sortedMatches3D = [...matchesMap3D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
+  console.log(sortedMatches3D)
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    // if (pushedCount3D >= 300) {
-    //   break
-    // }
+    if (pushedCount3D >= 30) {
+      break
+    }
 
     const currentNumber = sortedMatches3D[i][0]
 
@@ -176,6 +178,7 @@ const generate_4d_array = async ({
   const sortedMatches4D = [...matchesMap4D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
+  console.log({ sortedMatches4D })
 
   let pushedCount4D = 0
 
@@ -199,6 +202,7 @@ const generate_4d_array = async ({
       }
     }
   }
+  console.log({ generated_4d })
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
