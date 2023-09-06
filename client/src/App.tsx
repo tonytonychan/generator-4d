@@ -3,6 +3,7 @@ import LoadingIndicator from './Components/LoadingIndicator/LoadingIndicator'
 import { Helmet } from 'react-helmet'
 import { Switch } from '@headlessui/react'
 import { class_names } from './utils/class-names'
+import React from 'react'
 
 function App() {
   const [tableData, setTableData] = useState<any[]>([])
@@ -12,17 +13,10 @@ function App() {
   const [isDeleting, setIsDeleting] = useState(false)
   const [show_twin, set_show_twin] = useState(false)
 
-  const [expandedRows, setExpandedRows] = useState(
-    Array(tableData.length).fill(false)
-  )
+  const [expandedRow, setExpandedRow] = useState(null)
 
-  const toggleRowDetails = (index: any) => {
-    // Create a copy of the expandedRows array
-    const newExpandedRows = [...expandedRows]
-    // Toggle the value at the specified index
-    newExpandedRows[index] = !newExpandedRows[index]
-    // Update the state
-    setExpandedRows(newExpandedRows)
+  const handleButtonClick = (index: any) => {
+    setExpandedRow(index === expandedRow ? null : index)
   }
 
   const handleTarikDataButton = useCallback(async () => {
@@ -112,6 +106,8 @@ function App() {
   const handleSelectChange = (event: any) => {
     setSelectedPasaran(event.target.value)
   }
+
+  console.log({ tableData })
 
   return (
     <div className='App'>
@@ -252,8 +248,6 @@ function App() {
           <thead>
             <tr>
               <th className='px-12'>Angka 1</th>
-              {/* <th className='px-12'>Angka 2</th>
-              <th className='px-12'>Angka 3</th> */}
               <th className='px-24'>Total Omset</th>
               <th className='px-24'>Profit</th>
               <th className='px-24'>% Margin</th>
@@ -261,38 +255,37 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {tableData.map((data: any, index: any) => (
-              <tr key={index}>
-                <td className='py-2 px-12'>{data.angka_keluar[0]}</td>
-                {/* <td className='py-2 px-12'>{data.angka_keluar[1]}</td>
-                <td className='py-2 px-12'>{data.angka_keluar[2]}</td> */}
-                <td className='py-2 px-24'>{data.total_omset}</td>
-                <td className='py-2 px-24'>{data.hasil}</td>
-                <td className='py-2 px-24'>
-                  {Math.round((+data.hasil / +data.total_omset) * 100).toFixed(
-                    1
-                  )}
-                  %
-                </td>
-                <td className='py-2 px-48'>
-                  <button
-                    className='bg-gray-200 p-1 rounded-lg disabled w-24'
-                    onClick={() => toggleRowDetails(index)}
-                  >
-                    See Detail
-                  </button>
-                 
-                </td>
-                 {expandedRows[index] && (
-                    <td>
-                      <tr className='mt-2'>{data.total_omset}</tr>
-                      <tr className='mt-2'>{data.total_omset}</tr>
-                      <tr className='mt-2'>{data.total_omset}</tr>
-                      <tr className='mt-2'>{data.total_omset}</tr>
-                      <tr className='mt-2'>{data.total_omset}</tr>
-                    </td>
-                  )}
-              </tr>
+            {tableData.map((data, index) => (
+              <React.Fragment key={index}>
+                <tr>
+                  <td className='py-2 px-12'>{data.angka_keluar[0]}</td>
+                  <td className='py-2 px-24'>{data.total_omset}</td>
+                  <td className='py-2 px-24'>{data.hasil}</td>
+                  <td className='py-2 px-24'>
+                    {Math.round(
+                      (+data.hasil / +data.total_omset) * 100
+                    ).toFixed(1)}
+                    %
+                  </td>
+                  <td className='py-2 px-48'>
+                    <button
+                      className='bg-gray-200 p-1 rounded-lg w-24'
+                      onClick={() => handleButtonClick(index)}
+                    >
+                      {expandedRow === index ? 'Close' : 'See Detail'}
+                    </button>
+                  </td>
+                </tr>
+                {expandedRow === index && (
+                  <tr className='border border-blue-400 border-separate'>
+                    <td>2D DEPAN : {data.details[index]['2D Depan']}</td>
+                    <td>2D TENGAH : {data.details[index]['2D Tengah']}</td>
+                    <td>2D BELAKANG : {data.details[index]['2D Belakang']}</td>
+                    <td>3D : {data.details[index]['3D']}</td>
+                    <td>4D : {data.details[index]['4D']}</td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
