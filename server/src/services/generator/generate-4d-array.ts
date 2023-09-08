@@ -11,16 +11,33 @@ interface Generate4DArrrayParams {
   show_kembar: string
 }
 
+// function hasInvalidChars(number: string, targetStr: string) {
+//   console.log({ number, targetStr })
+
+//   for (let i = 0; i < number.length; i++) {
+//     for (let j = 0; j < targetStr.length; j++) {
+//       if (targetStr[j] === number[i]) {
+//         console.log('invalid', number, targetStr, number[i], targetStr[j])
+
+//         return true
+//       }
+//     }
+//   }
+//   console.log('valid')
+//   return false
+// }
+
 function hasInvalidChars(number: string, targetStr: string) {
   for (let i = 0; i < number.length; i++) {
     for (let j = 0; j < targetStr.length; j++) {
-      if (targetStr[j].includes(number[i])) {
-        return true
+      if (targetStr[j] === number[i]) {
+        console.log('invalid', number, targetStr)
+        return true // Return true as soon as a match is found
       }
     }
   }
-
-  return false
+  console.log('valid', number, targetStr)
+  return false // Return false only if no matches are found
 }
 
 const generate_4d_array = async ({
@@ -98,7 +115,7 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 20) {
+    if (pushed_2d_number_quantity >= 30) {
       break
     }
 
@@ -136,7 +153,7 @@ const generate_4d_array = async ({
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 50) {
+    if (pushedCount3D >= 100) {
       break
     }
 
