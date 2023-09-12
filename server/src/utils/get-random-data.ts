@@ -22,7 +22,7 @@
 //! RANDOM 
 function generate_random_data_array(array: any[]) {
   const random_data_array: any[][] = [];
-  const outputLength = 30;
+  const outputLength = 5;
 
   // Shuffle the input array randomly
   const shuffledArray = array.slice(); // Copy the original array
