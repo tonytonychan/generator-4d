@@ -248,6 +248,8 @@ function App() {
           <thead>
             <tr>
               <th className='px-12'>Angka 1</th>
+              <th className='px-12'>Angka 2</th>
+              <th className='px-12'>Angka 3</th>
               <th className='px-24'>Total Omset</th>
               <th className='px-24'>Profit</th>
               <th className='px-24'>% Margin</th>
@@ -259,6 +261,8 @@ function App() {
               <React.Fragment key={index}>
                 <tr>
                   <td className='py-2 px-12'>{data.angka_keluar[0]}</td>
+                  <td className='py-2 px-12'>{data.angka_keluar[1]}</td>
+                  <td className='py-2 px-12'>{data.angka_keluar[2]}</td>
                   <td className='py-2 px-24'>{data.total_omset}</td>
                   <td className='py-2 px-24'>{data.hasil}</td>
                   <td className='py-2 px-24'>
