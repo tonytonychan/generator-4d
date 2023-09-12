@@ -11,44 +11,61 @@ interface Generate4DArrrayParams {
   show_kembar: string
 }
 
-// function hasInvalidChars(number: string, targetStr: string) {
-//   console.log({ number, targetStr })
+function convert_number_to_string_arr(arr: number[]) {
+  let stringArray = []
 
-//   for (let i = 0; i < number.length; i++) {
-//     for (let j = 0; j < targetStr.length; j++) {
-//       if (targetStr[j] === number[i]) {
-//         console.log('invalid', number, targetStr, number[i], targetStr[j])
+  for (let i = 0; i < arr.length; i++) {
+    let number = arr[i]
 
-//         return true
-//       }
-//     }
-//   }
-//   console.log('valid')
-//   return false
-// }
+    let stringValue = number < 10 ? `0${number}` : number.toString()
 
-function hasInvalidChars(number: string, targetStr: string) {
+    stringArray.push(stringValue)
+  }
+
+  return stringArray
+}
+
+function had_previous_keluaran(number: string, targetStr: string) {
   for (let i = 0; i < number.length; i++) {
     for (let j = 0; j < targetStr.length; j++) {
       if (targetStr[j] === number[i]) {
-        // console.log('invalid', number, targetStr)
-        return true // Return true as soon as a match is found
+        return true
       }
     }
   }
-  // console.log('valid', number, targetStr)
-  return false // Return false only if no matches are found
+
+  return false
+}
+
+function make_sure_3d_string_arr(array: string[]) {
+  for (let i = 0; i < array.length; i++) {
+    const str = array[i]
+
+    if (/^\d{2}$/.test(str)) {
+      array[i] = '0' + str
+    }
+  }
+}
+
+function make_sure_4d_string_arr(array: string[]) {
+  for (let i = 0; i < array.length; i++) {
+    const str = array[i]
+
+    if (/^\d{3}$/.test(str)) {
+      array[i] = '0' + str
+    }
+  }
 }
 
 const generate_4d_array = async ({
   pasaran,
   show_kembar,
 }: Generate4DArrrayParams) => {
-  const array_3d_to_check: any[] = []
-  const array_4d_to_check: any[] = []
-  const all_bet_data_2d: any[] = []
-  const all_bet_data_3d: any[] = []
-  const all_bet_data_4d: any[] = []
+  const array_3d_to_check: string[] = []
+  const array_4d_to_check: string[] = []
+  const all_bet_data_2d: number[] = []
+  const all_bet_data_3d: number[] = []
+  const all_bet_data_4d: number[] = []
   const one_digit_number_array = one_digit_generate_number_array()
   const two_digit_number_array = two_digit_generate_number_array()
 
@@ -91,6 +108,12 @@ const generate_4d_array = async ({
     all_bet_data_4d.push(...array_all_bet_4d)
   }
 
+  const all_bet_data_2d_string = convert_number_to_string_arr(all_bet_data_2d)
+  const all_bet_data_3d_string = convert_number_to_string_arr(all_bet_data_3d)
+  make_sure_3d_string_arr(all_bet_data_3d_string)
+  const all_bet_data_4d_string = convert_number_to_string_arr(all_bet_data_4d)
+  make_sure_4d_string_arr(all_bet_data_4d_string)
+
   const generated_2d: any[] = []
   const generated_3d: any[] = []
   const generated_4d: any[] = []
@@ -102,7 +125,9 @@ const generate_4d_array = async ({
   //! FILTER 2D
 
   two_digit_number_array.forEach(number => {
-    const matches = all_bet_data_2d.filter(item => item == number).length
+    const matches = all_bet_data_2d_string.filter(
+      item => item === number
+    ).length
 
     matchesMap2D.set(number, matches)
   })
@@ -110,7 +135,6 @@ const generate_4d_array = async ({
   const sorted_from_matches_2d = [...matchesMap2D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
-  console.log({ sorted_from_matches_2d })
 
   let pushed_2d_number_quantity = 0
 
@@ -130,8 +154,6 @@ const generate_4d_array = async ({
   if (generated_2d.length < 3)
     throw new Error('Not enough data generated for 2D')
 
-  console.log({ generated_2d })
-
   //! FILTER 3D
 
   for (const item of generated_2d) {
@@ -141,7 +163,9 @@ const generate_4d_array = async ({
   }
 
   array_3d_to_check.forEach(number => {
-    const matches = all_bet_data_3d.filter(item => item == number).length
+    const matches = all_bet_data_3d_string.filter(
+      item => item === number
+    ).length
 
     matchesMap3D.set(number, matches)
   })
@@ -149,11 +173,10 @@ const generate_4d_array = async ({
   const sortedMatches3D = [...matchesMap3D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
-  console.log(sortedMatches3D)
 
   let pushedCount3D = 0
   for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 300) {
+    if (pushedCount3D >= 200) {
       break
     }
 
@@ -188,14 +211,15 @@ const generate_4d_array = async ({
   }
 
   array_4d_to_check.forEach(number => {
-    const matches = all_bet_data_4d.filter(item => item == number).length
+    const matches = all_bet_data_4d_string.filter(
+      item => item === number
+    ).length
     matchesMap4D.set(number, matches)
   })
 
   const sortedMatches4D = [...matchesMap4D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
-  console.log({ sortedMatches4D })
 
   let pushedCount4D = 0
 
@@ -219,7 +243,6 @@ const generate_4d_array = async ({
       }
     }
   }
-  console.log({ generated_4d })
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
@@ -236,7 +259,7 @@ const generate_4d_array = async ({
   const final_generated_number = []
 
   for (let i = 0; i < generated_4d.length; i++) {
-    if (!hasInvalidChars(generated_4d[i], angka_keluar)) {
+    if (!had_previous_keluaran(generated_4d[i], angka_keluar)) {
       final_generated_number.push(generated_4d[i])
     }
   }
