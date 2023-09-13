@@ -1,14 +1,39 @@
 import { randomChalk } from 'ody-utils'
 import { Bet } from '../../models/bet'
-import {
-  one_digit_generate_number_array,
-  two_digit_generate_number_array,
-} from '../../utils/generate-array-number'
+import { one_digit_generate_number_array } from '../../utils/generate-array-number'
 import Semalam from '../../models/semalam'
 
 interface Generate4DArrrayParams {
   pasaran: string
   show_kembar: string
+}
+
+interface BetData {
+  bet_number: number
+  player_win: number
+}
+
+function calculate_array(
+  data: BetData[]
+): { bet_number: number; total_value: number }[] {
+  const betTotals: { [key: number]: number } = {}
+
+  data.forEach(item => {
+    const { bet_number, player_win } = item
+
+    if (betTotals[bet_number]) {
+      betTotals[bet_number] += player_win
+    } else {
+      betTotals[bet_number] = player_win
+    }
+  })
+
+  const result = Object.keys(betTotals).map(bet_number => ({
+    bet_number: parseInt(bet_number),
+    total_value: betTotals[parseInt(bet_number)],
+  }))
+
+  return result
 }
 
 function convert_number_to_string_arr(arr: number[]) {
@@ -63,11 +88,10 @@ const generate_4d_array = async ({
 }: Generate4DArrrayParams) => {
   const array_3d_to_check: string[] = []
   const array_4d_to_check: string[] = []
-  const all_bet_data_2d: number[] = []
+  const all_bet_data_2d: BetData[] = []
   const all_bet_data_3d: number[] = []
   const all_bet_data_4d: number[] = []
   const one_digit_number_array = one_digit_generate_number_array()
-  const two_digit_number_array = two_digit_generate_number_array()
 
   const data_pasaran = await Bet.aggregate([
     {
@@ -87,19 +111,21 @@ const generate_4d_array = async ({
   for (const data of data_pasaran) {
     const bettingan2D = await Bet.find(
       { website: data._id, periode: data.periode, bet_type: '2D' },
-      { _id: 0, bet_number: 1 }
+      { _id: 0, bet_number: 1, player_win: 1 }
     )
     const bettingan3D = await Bet.find(
       { website: data._id, periode: data.periode, bet_type: '3D' },
-      { _id: 0, bet_number: 1 }
+      { _id: 0, bet_number: 1, player_win: 1 }
     )
 
     const bettingan4D = await Bet.find(
       { website: data._id, periode: data.periode, bet_type: '4D' },
-      { _id: 0, bet_number: 1 }
+      { _id: 0, bet_number: 1, player_win: 1 }
     )
-
-    const array_all_bet_2d = bettingan2D.map(item => item.bet_number)
+    const array_all_bet_2d = bettingan2D.map(item => ({
+      bet_number: item.bet_number,
+      player_win: item.player_win,
+    }))
     const array_all_bet_3d = bettingan3D.map(item => item.bet_number)
     const array_all_bet_4d = bettingan4D.map(item => item.bet_number)
 
@@ -108,7 +134,17 @@ const generate_4d_array = async ({
     all_bet_data_4d.push(...array_all_bet_4d)
   }
 
-  const all_bet_data_2d_string = convert_number_to_string_arr(all_bet_data_2d)
+  const result_array = calculate_array(all_bet_data_2d)
+
+  const sorted_result_array = result_array.sort(
+    (a, b) => a.total_value - b.total_value
+  )
+
+  const all_bet_data_2d_array = sorted_result_array.map(item => item.bet_number)
+
+  const all_bet_data_2d_string = convert_number_to_string_arr(
+    all_bet_data_2d_array
+  )
   const all_bet_data_3d_string = convert_number_to_string_arr(all_bet_data_3d)
   make_sure_3d_string_arr(all_bet_data_3d_string)
   const all_bet_data_4d_string = convert_number_to_string_arr(all_bet_data_4d)
@@ -118,41 +154,24 @@ const generate_4d_array = async ({
   const generated_3d: any[] = []
   const generated_4d: any[] = []
 
-  const matchesMap2D = new Map()
   const matchesMap3D = new Map()
   const matchesMap4D = new Map()
 
   //! FILTER 2D
 
-  two_digit_number_array.forEach(number => {
-    const matches = all_bet_data_2d_string.filter(
-      item => item === number
-    ).length
-
-    matchesMap2D.set(number, matches)
-  })
-
-  const sorted_from_matches_2d = [...matchesMap2D.entries()].sort(
-    (a, b) => a[1] - b[1]
-  )
-
   let pushed_2d_number_quantity = 0
 
-  for (let i = 0; i < sorted_from_matches_2d.length; i++) {
-    if (pushed_2d_number_quantity >= 50) {
+  for (let i = 0; i < all_bet_data_2d_string.length; i++) {
+    if (pushed_2d_number_quantity >= 20) {
       break
     }
 
-    const current_number_index = sorted_from_matches_2d[i][0]
-
-    if (current_number_index[0] !== current_number_index[1]) {
-      generated_2d.push(current_number_index)
+    if (all_bet_data_2d_string[i][0] !== all_bet_data_2d_string[i][1]) {
+      generated_2d.push(all_bet_data_2d_string[i])
       pushed_2d_number_quantity++
     }
   }
-
-  if (generated_2d.length < 3)
-    throw new Error('Not enough data generated for 2D')
+  console.log({ generated_2d })
 
   //! FILTER 3D
 
@@ -170,37 +189,35 @@ const generate_4d_array = async ({
     matchesMap3D.set(number, matches)
   })
 
-  const sortedMatches3D = [...matchesMap3D.entries()].sort(
+  const sorted_by_matches_3d = [...matchesMap3D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
 
-  let pushedCount3D = 0
-  for (let i = 0; i < sortedMatches3D.length; i++) {
-    if (pushedCount3D >= 100) {
-      break
-    }
+  console.log({ sorted_by_matches_3d })
 
-    const currentNumber = sortedMatches3D[i][0]
+  for (let i = 0; i < sorted_by_matches_3d.length; i++) {
+    const currentNumber = sorted_by_matches_3d[i][0]
+    const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (show_kembar === 'true') {
-      generated_3d.push(currentNumber)
-      pushedCount3D++
-    } else {
-      if (
-        currentNumber[0] !== currentNumber[1] &&
-        currentNumber[1] !== currentNumber[2] &&
-        currentNumber[0] !== currentNumber[2]
-      ) {
+    if (matches_3d <= 0) {
+      if (show_kembar === 'true') {
         generated_3d.push(currentNumber)
-        pushedCount3D++
+      } else {
+        if (
+          currentNumber[0] !== currentNumber[1] &&
+          currentNumber[1] !== currentNumber[2] &&
+          currentNumber[0] !== currentNumber[2]
+        ) {
+          generated_3d.push(currentNumber)
+        }
       }
     }
   }
-
-  if (generated_3d.length < 3)
-    throw new Error('Not enough data generated for 3D')
-
   console.log({ generated_3d })
+  if (!generated_3d.length)
+    throw new Error(
+      `Data 3D tidak cukup untuk mencari angka yang tidak di-bet player `
+    )
 
   //! FILTER 4D
 
@@ -225,21 +242,24 @@ const generate_4d_array = async ({
 
   for (let i = 0; i < sortedMatches4D.length; i++) {
     const currentNumber = sortedMatches4D[i][0]
+    const matches_4d = sortedMatches4D[i][1]
 
-    if (show_kembar === 'true') {
-      generated_4d.push(currentNumber)
-      pushedCount4D++
-    } else {
-      if (
-        currentNumber[0] !== currentNumber[1] &&
-        currentNumber[1] !== currentNumber[2] &&
-        currentNumber[2] !== currentNumber[3] &&
-        currentNumber[0] !== currentNumber[2] &&
-        currentNumber[0] !== currentNumber[3] &&
-        currentNumber[1] !== currentNumber[3]
-      ) {
+    if (matches_4d <= 0) {
+      if (show_kembar === 'true') {
         generated_4d.push(currentNumber)
         pushedCount4D++
+      } else {
+        if (
+          currentNumber[0] !== currentNumber[1] &&
+          currentNumber[1] !== currentNumber[2] &&
+          currentNumber[2] !== currentNumber[3] &&
+          currentNumber[0] !== currentNumber[2] &&
+          currentNumber[0] !== currentNumber[3] &&
+          currentNumber[1] !== currentNumber[3]
+        ) {
+          generated_4d.push(currentNumber)
+          pushedCount4D++
+        }
       }
     }
   }

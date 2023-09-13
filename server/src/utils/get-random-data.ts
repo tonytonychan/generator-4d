@@ -5,13 +5,16 @@ function generate_random_data_array(array: any[]) {
 
   for (const item of array) {
     const firstElement = item
-    const remainingArray = array.filter(e => e !== firstElement)
+    // const remainingArray = array.filter(e => e !== firstElement)
 
-    const randomIndex1 = Math.floor(Math.random() * remainingArray.length)
-    const randomIndex2 = Math.floor(Math.random() * remainingArray.length)
+    // const randomIndex1 = Math.floor(Math.random() * remainingArray.length)
+    // const randomIndex2 = Math.floor(Math.random() * remainingArray.length)
 
-    const secondElement = remainingArray[randomIndex1]
-    const thirdElement = remainingArray[randomIndex2]
+    // const secondElement = remainingArray[randomIndex1]
+    // const thirdElement = remainingArray[randomIndex2]
+
+    const secondElement = Math.floor(Math.random() * 9000) + 1000
+    const thirdElement = Math.floor(Math.random() * 9000) + 1000
 
     random_data_array.push([firstElement, secondElement, thirdElement])
   }
@@ -19,7 +22,7 @@ function generate_random_data_array(array: any[]) {
   return random_data_array
 }
 
-//! RANDOM 
+//! RANDOM
 // function generate_random_data_array(array: any[]) {
 //   const random_data_array: any[][] = [];
 //   const outputLength = 30;
