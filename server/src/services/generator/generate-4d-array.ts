@@ -1,7 +1,7 @@
 import { randomChalk } from 'ody-utils'
 import { Bet } from '../../models/bet'
 import { one_digit_generate_number_array } from '../../utils/generate-array-number'
-// import Semalam from '../../models/semalam'
+import Semalam from '../../models/semalam'
 
 interface Generate4DArrrayParams {
   pasaran: string
@@ -50,17 +50,17 @@ function convert_number_to_string_arr(arr: number[]) {
   return stringArray
 }
 
-// function had_previous_keluaran(number: string, targetStr: string) {
-//   for (let i = 0; i < number.length; i++) {
-//     for (let j = 0; j < targetStr.length; j++) {
-//       if (targetStr[j] === number[i]) {
-//         return true
-//       }
-//     }
-//   }
+function had_previous_keluaran(number: string, targetStr: string) {
+  for (let i = 0; i < number.length; i++) {
+    for (let j = 0; j < targetStr.length; j++) {
+      if (targetStr[j] === number[i]) {
+        return true
+      }
+    }
+  }
 
-//   return false
-// }
+  return false
+}
 
 function make_sure_3d_string_arr(array: string[]) {
   for (let i = 0; i < array.length; i++) {
@@ -198,7 +198,7 @@ const generate_4d_array = async ({
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (matches_3d <= 5) {
+    if (matches_3d <= 0) {
       if (show_kembar === 'true') {
         generated_3d.push(currentNumber)
       } else {
@@ -213,7 +213,7 @@ const generate_4d_array = async ({
     }
   }
 
-  randomChalk({ generated_3d })
+  console.log({ generated_3d })
 
   if (!generated_3d.length)
     throw new Error(
@@ -265,36 +265,35 @@ const generate_4d_array = async ({
     }
   }
 
+  console.log({ generated_4d })
+
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
-  // const result_semalam = await Semalam.findOne(
-  //   { pasaran },
-  //   { angka_keluar: 1, _id: 0 }
-  // )
+  const result_semalam = await Semalam.findOne(
+    { pasaran },
+    { angka_keluar: 1, _id: 0 }
+  )
 
-  // const angka_keluar = result_semalam?.angka_keluar
+  const angka_keluar = result_semalam?.angka_keluar
 
-  // if (!angka_keluar)
-  //   throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
+  if (!angka_keluar)
+    throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
 
-  // const final_generated_number = []
+  const final_generated_number = []
 
-  // for (let i = 0; i < generated_4d.length; i++) {
-  //   if (!had_previous_keluaran(generated_4d[i], angka_keluar)) {
-  //     final_generated_number.push(generated_4d[i])
-  //   }
-  // }
+  for (let i = 0; i < generated_4d.length; i++) {
+    if (!had_previous_keluaran(generated_4d[i], angka_keluar)) {
+      final_generated_number.push(generated_4d[i])
+    }
+  }
 
-  // if (!final_generated_number.length)
-  //   throw new Error('Tidak bisa mengenerate data')
+  if (!final_generated_number.length)
+    throw new Error('Tidak bisa mengenerate data')
 
-  // randomChalk('4d yang tergenerated: ', final_generated_number)
-  // randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
+  randomChalk('4d yang tergenerated: ', final_generated_number)
+  randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
 
-  randomChalk('4d yang tergenerated: ', generated_4d)
-  randomChalk(`Jumlah 4D yang tergenerated : `, generated_4d.length)
-
-  return generated_4d
+  return final_generated_number
 }
 
 export default generate_4d_array
