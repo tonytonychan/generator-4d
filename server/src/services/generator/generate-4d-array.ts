@@ -198,7 +198,7 @@ const generate_4d_array = async ({
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (matches_3d <= 3) {
+    if (matches_3d <= 5) {
       if (show_kembar === 'true') {
         generated_3d.push(currentNumber)
       } else {
