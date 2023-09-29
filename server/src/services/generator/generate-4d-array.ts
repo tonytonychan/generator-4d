@@ -194,6 +194,8 @@ const generate_4d_array = async ({
     (a, b) => a[1] - b[1]
   )
 
+  console.log({ sorted_by_matches_3d })
+
   for (let i = 0; i < sorted_by_matches_3d.length; i++) {
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
@@ -238,6 +240,8 @@ const generate_4d_array = async ({
   const sortedMatches4D = [...matchesMap4D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
+
+  console.log({ sortedMatches4D })
 
   let pushedCount4D = 0
 
