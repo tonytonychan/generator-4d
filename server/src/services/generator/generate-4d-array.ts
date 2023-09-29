@@ -198,7 +198,7 @@ const generate_4d_array = async ({
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (matches_3d <= 0) {
+    if (matches_3d <= 4) {
       if (show_kembar === 'true') {
         generated_3d.push(currentNumber)
       } else {
@@ -245,7 +245,7 @@ const generate_4d_array = async ({
     const currentNumber = sortedMatches4D[i][0]
     const matches_4d = sortedMatches4D[i][1]
 
-    if (matches_4d <= 0) {
+    if (matches_4d <= 4) {
       if (show_kembar === 'true') {
         generated_4d.push(currentNumber)
         pushedCount4D++
