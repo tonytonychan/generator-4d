@@ -292,7 +292,9 @@ const generate_4d_array = async ({
   }
 
   if (!final_generated_number.length)
-    throw new Error('Tidak bisa mengenerate data')
+    throw new Error(
+      'Semua angka yang tergenerated dari data semalam. tidak bisa mengenerate data'
+    )
 
   randomChalk('4d yang tergenerated: ', final_generated_number)
   randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
