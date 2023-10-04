@@ -209,7 +209,7 @@ const generate_4d_array = async ({
         generated_3d.push(currentNumber)
       }
     } else {
-      if (matches_3d <= lowestMatches3D + 15) {
+      if (matches_3d <= lowestMatches3D + 10) {
         if (
           currentNumber[0] !== currentNumber[1] &&
           currentNumber[1] !== currentNumber[2] &&
@@ -256,22 +256,6 @@ const generate_4d_array = async ({
     const currentNumber = sortedMatches4D[i][0]
     const matches_4d = sortedMatches4D[i][1]
 
-    // if (show_kembar === 'true') {
-    //   if (matches_3d === lowestMatches3D) {
-    //     generated_3d.push(currentNumber)
-    //   }
-    // } else {
-    //   if (matches_3d <= lowestMatches3D + 30) {
-    //     if (
-    //       currentNumber[0] !== currentNumber[1] &&
-    //       currentNumber[1] !== currentNumber[2] &&
-    //       currentNumber[0] !== currentNumber[2]
-    //     ) {
-    //       generated_3d.push(currentNumber)
-    //     } else {
-    //     }
-    //   }
-    // }
     if (show_kembar === 'true') {
       if (matches_4d <= 0) {
         generated_4d.push(currentNumber)
