@@ -11,7 +11,7 @@ import Result from '../../models/result'
 const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const pasaran_query = req.query.pasaran_query as string
   const show_kembar = req.query.show_kembar as string
-  const show_yesterday = req.query.show_kemarin as string
+  const batas = req.query.batas as string
 
   if (!pasaran_query)
     throw new Error('Please provide pasaran as a query value!')
@@ -24,7 +24,7 @@ const fetch_prediksi_controller = async (req: Request, res: Response) => {
   const array_to_check = await generate_4d_array({
     pasaran: pasaran_query,
     show_kembar,
-    show_yesterday,
+    batas,
   })
 
   const angka_prediksi = get_random_data(array_to_check)

@@ -6,6 +6,7 @@ import Semalam from '../../models/semalam'
 interface Generate4DArrrayParams {
   pasaran: string
   show_kembar: string
+  batas: string
 }
 
 interface BetData {
@@ -85,6 +86,7 @@ function make_sure_4d_string_arr(array: string[]) {
 const generate_4d_array = async ({
   pasaran,
   show_kembar,
+  batas,
 }: Generate4DArrrayParams) => {
   const array_3d_to_check: string[] = []
   const array_4d_to_check: string[] = []
@@ -172,8 +174,6 @@ const generate_4d_array = async ({
     }
   }
 
-  randomChalk({ generated_2d })
-
   //! FILTER 3D
 
   for (const item of generated_2d) {
@@ -195,8 +195,6 @@ const generate_4d_array = async ({
   )
 
   const lowestMatches3D = sorted_by_matches_3d[0][1]
-  console.log({ sorted_by_matches_3d })
-  console.log({ lowestMatches3D })
 
   for (let i = 0; i < sorted_by_matches_3d.length; i++) {
     const currentNumber = sorted_by_matches_3d[i][0]
@@ -207,7 +205,7 @@ const generate_4d_array = async ({
         generated_3d.push(currentNumber)
       }
     } else {
-      if (matches_3d <= lowestMatches3D + 10) {
+      if (matches_3d <= lowestMatches3D + +batas) {
         if (
           currentNumber[0] !== currentNumber[1] &&
           currentNumber[1] !== currentNumber[2] &&
@@ -219,8 +217,6 @@ const generate_4d_array = async ({
       }
     }
   }
-
-  console.log({ generated_3d })
 
   if (!generated_3d.length)
     throw new Error(
@@ -245,8 +241,6 @@ const generate_4d_array = async ({
   const sortedMatches4D = [...matchesMap4D.entries()].sort(
     (a, b) => a[1] - b[1]
   )
-
-  console.log({ sortedMatches4D })
 
   let pushedCount4D = 0
 
@@ -273,8 +267,6 @@ const generate_4d_array = async ({
       }
     }
   }
-
-  console.log({ generated_4d })
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
