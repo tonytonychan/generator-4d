@@ -12,7 +12,7 @@ function App() {
   const [isFetching, setIsFetching] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [show_twin, set_show_twin] = useState(false)
-  const [show_yesterday, set_show_yersterday] = useState(false)
+  // const [show_yesterday, set_show_yersterday] = useState(false)
 
   const [expandedRow, setExpandedRow] = useState(null)
 
@@ -44,7 +44,7 @@ function App() {
     try {
       setIsFetching(true)
       const response = await fetch(
-        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}&show_kembar=${show_twin}&show_kemarin=${show_yesterday}`
+        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}&show_kembar=${show_twin}`
       )
       const res = await response.json()
       if (!response.ok) throw new Error(res.message)
@@ -210,7 +210,7 @@ function App() {
           </Switch>
           <span className='text-sm ml-1'>Kembar</span>
         </div>
-        <div className='flex flex-col'>
+        {/* <div className='flex flex-col'>
           <Switch
             checked={show_yesterday}
             onChange={set_show_yersterday}
@@ -268,7 +268,7 @@ function App() {
             </span>
           </Switch>
           <span className='text-sm ml-1'>Kemarin</span>
-        </div>
+        </div> */}
 
         <button
           onClick={handleTarikDataButton}
