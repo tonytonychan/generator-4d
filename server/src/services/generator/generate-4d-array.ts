@@ -210,7 +210,7 @@ const generate_4d_array = async ({
         generated_3d.push(currentNumber)
       }
     } else {
-      if (matches_3d === lowestMatches3D) {
+      if (matches_3d <= lowestMatches3D+3) {
         if (
           currentNumber[0] !== currentNumber[1] &&
           currentNumber[1] !== currentNumber[2] &&
