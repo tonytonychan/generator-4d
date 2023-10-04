@@ -196,13 +196,16 @@ const generate_4d_array = async ({
     (a, b) => a[1] - b[1]
   )
 
+  const lowestMatches3D = sorted_by_matches_3d[0][1]
   console.log({ sorted_by_matches_3d })
+  console.log({ lowestMatches3D })
 
   for (let i = 0; i < sorted_by_matches_3d.length; i++) {
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (matches_3d <= 2) {
+    if (matches_3d === lowestMatches3D) {
+      // Check if current matches_3d is equal to the lowest
       if (show_kembar === 'true') {
         generated_3d.push(currentNumber)
       } else {
