@@ -199,7 +199,6 @@ const generate_4d_array = async ({
   const lowestMatches3D = sorted_by_matches_3d[0][1]
   console.log({ sorted_by_matches_3d })
   console.log({ lowestMatches3D })
-  
 
   for (let i = 0; i < sorted_by_matches_3d.length; i++) {
     const currentNumber = sorted_by_matches_3d[i][0]
@@ -210,16 +209,14 @@ const generate_4d_array = async ({
         generated_3d.push(currentNumber)
       }
     } else {
-      if (matches_3d <= lowestMatches3D+3) {
+      if (matches_3d <= lowestMatches3D + 10) {
         if (
           currentNumber[0] !== currentNumber[1] &&
           currentNumber[1] !== currentNumber[2] &&
           currentNumber[0] !== currentNumber[2]
         ) {
           generated_3d.push(currentNumber)
-        }
-        else {
-          
+        } else {
         }
       }
     }
