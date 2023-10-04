@@ -199,22 +199,27 @@ const generate_4d_array = async ({
   const lowestMatches3D = sorted_by_matches_3d[0][1]
   console.log({ sorted_by_matches_3d })
   console.log({ lowestMatches3D })
+  
 
   for (let i = 0; i < sorted_by_matches_3d.length; i++) {
     const currentNumber = sorted_by_matches_3d[i][0]
     const matches_3d = sorted_by_matches_3d[i][1]
 
-    if (matches_3d === lowestMatches3D) {
-      // Check if current matches_3d is equal to the lowest
-      if (show_kembar === 'true') {
+    if (show_kembar === 'true') {
+      if (matches_3d === lowestMatches3D) {
         generated_3d.push(currentNumber)
-      } else {
+      }
+    } else {
+      if (matches_3d === lowestMatches3D) {
         if (
           currentNumber[0] !== currentNumber[1] &&
           currentNumber[1] !== currentNumber[2] &&
           currentNumber[0] !== currentNumber[2]
         ) {
           generated_3d.push(currentNumber)
+        }
+        else {
+          
         }
       }
     }
