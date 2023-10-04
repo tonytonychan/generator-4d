@@ -6,6 +6,7 @@ import Semalam from '../../models/semalam'
 interface Generate4DArrrayParams {
   pasaran: string
   show_kembar: string
+  show_yesterday: string
 }
 
 interface BetData {
@@ -85,6 +86,7 @@ function make_sure_4d_string_arr(array: string[]) {
 const generate_4d_array = async ({
   pasaran,
   show_kembar,
+  show_yesterday,
 }: Generate4DArrrayParams) => {
   const array_3d_to_check: string[] = []
   const array_4d_to_check: string[] = []
@@ -273,33 +275,39 @@ const generate_4d_array = async ({
 
   if (!generated_4d.length) throw new Error('Not enough data generated for 4D')
 
-  const result_semalam = await Semalam.findOne(
-    { pasaran },
-    { angka_keluar: 1, _id: 0 }
-  )
-
-  const angka_keluar = result_semalam?.angka_keluar
-
-  if (!angka_keluar)
-    throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
-
-  const final_generated_number = []
-
-  for (let i = 0; i < generated_4d.length; i++) {
-    if (!had_previous_keluaran(generated_4d[i], angka_keluar)) {
-      final_generated_number.push(generated_4d[i])
-    }
-  }
-
-  if (!final_generated_number.length)
-    throw new Error(
-      'Semua angka yang tergenerated dari data semalam. tidak bisa mengenerate data'
+  if (show_yesterday) {
+    randomChalk('4d yang tergenerated: ', generated_4d)
+    randomChalk(`Jumlah 4D yang tergenerated : `, generated_4d.length)
+    return generated_4d
+  } else {
+    const result_semalam = await Semalam.findOne(
+      { pasaran },
+      { angka_keluar: 1, _id: 0 }
     )
 
-  randomChalk('4d yang tergenerated: ', final_generated_number)
-  randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
+    const angka_keluar = result_semalam?.angka_keluar
 
-  return final_generated_number
+    if (!angka_keluar)
+      throw new Error('Tidak bisa menemukan data keluaran semalam dari DB')
+
+    const final_generated_number = []
+
+    for (let i = 0; i < generated_4d.length; i++) {
+      if (!had_previous_keluaran(generated_4d[i], angka_keluar)) {
+        final_generated_number.push(generated_4d[i])
+      }
+    }
+
+    if (!final_generated_number.length)
+      throw new Error(
+        'Semua angka yang tergenerated dari data semalam. tidak bisa mengenerate data'
+      )
+
+    randomChalk('4d yang tergenerated: ', final_generated_number)
+    randomChalk(`Jumlah 4D yang tergenerated : `, final_generated_number.length)
+
+    return final_generated_number
+  }
 }
 
 export default generate_4d_array

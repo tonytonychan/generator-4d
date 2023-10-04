@@ -17,54 +17,6 @@ const fetch_all_bet_controller: RequestHandler = async (req, res) => {
     `deleted currently saved bet data keluaran semalam for ${pasaran}`
   )
 
-  // const filtered_website_list = IDN.convert_string_to_kode_pasar({
-  //   data_array: website_list,
-  //   pasaran,
-  // })
-
-  // for (const website of filtered_website_list) {
-  //   const { phpsessid } = await IDN.login({
-  //     username: website.username,
-  //     password: website.password,
-  //     pin: website.pin,
-  //     base_url: website.baseURL,
-  //   })
-
-  //   if (!phpsessid) throw new Error('Gagal login ke IDN')
-
-  //   await IDN.fetch_bet_2D_player({
-  //     phpsessid,
-  //     base_URL: website.baseURL,
-  //     pasaran,
-  //     website: website.website,
-  //     kode_pasar: website.pasaran,
-  //   })
-
-  //   await IDN.fetch_bet_3D_player({
-  //     phpsessid,
-  //     base_URL: website.baseURL,
-  //     pasaran,
-  //     website: website.website,
-  //     kode_pasar: website.pasaran,
-  //   })
-
-  //   await IDN.fetch_bet_4D_player({
-  //     phpsessid,
-  //     base_URL: website.baseURL,
-  //     pasaran,
-  //     website: website.website,
-  //     kode_pasar: website.pasaran,
-  //   })
-
-  //   await IDN.fetch_bet_semalam_player({
-  //     phpsessid,
-  //     base_URL: website.baseURL,
-  //     pasaran,
-  //     website: website.website,
-  //     kode_pasar: website.pasaran,
-  //   })
-  // }
-
   await Promise.all(
     website_list.map(async website => {
       const { phpsessid } = await IDN.login({

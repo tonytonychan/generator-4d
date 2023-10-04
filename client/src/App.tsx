@@ -12,6 +12,7 @@ function App() {
   const [isFetching, setIsFetching] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
   const [show_twin, set_show_twin] = useState(false)
+  const [show_yesterday, set_show_yersterday] = useState(false)
 
   const [expandedRow, setExpandedRow] = useState(null)
 
@@ -43,7 +44,7 @@ function App() {
     try {
       setIsFetching(true)
       const response = await fetch(
-        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}&show_kembar=${show_twin}`
+        `/api/generate/fetch-prediksi?pasaran_query=${selectedPasaran.toUpperCase()}&show_kembar=${show_twin}&show_kemarin=${show_yesterday}`
       )
       const res = await response.json()
       if (!response.ok) throw new Error(res.message)
@@ -106,8 +107,6 @@ function App() {
   const handleSelectChange = (event: any) => {
     setSelectedPasaran(event.target.value)
   }
-
-  console.log({ tableData })
 
   return (
     <div className='App'>
@@ -210,6 +209,65 @@ function App() {
             </span>
           </Switch>
           <span className='text-sm ml-1'>Kembar</span>
+        </div>
+        <div className='flex flex-col'>
+          <Switch
+            checked={show_yesterday}
+            onChange={set_show_yersterday}
+            className={class_names(
+              show_yesterday ? 'bg-gray-200' : 'bg-gray-200',
+              'ml-1 mr-4 mt-4 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out'
+            )}
+          >
+            <span
+              className={class_names(
+                show_yesterday ? 'translate-x-5' : 'translate-x-0',
+                'pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out'
+              )}
+            >
+              <span
+                className={class_names(
+                  show_yesterday
+                    ? 'opacity-0 duration-100 ease-out'
+                    : 'opacity-100 duration-200 ease-in',
+                  'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+                )}
+                aria-hidden='true'
+              >
+                <svg
+                  className='h-3 w-3 text-gray-400'
+                  fill='none'
+                  viewBox='0 0 12 12'
+                >
+                  <path
+                    d='M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2'
+                    stroke='currentColor'
+                    strokeWidth={2}
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                  />
+                </svg>
+              </span>
+              <span
+                className={class_names(
+                  show_yesterday
+                    ? 'opacity-100 duration-200 ease-in'
+                    : 'opacity-0 duration-100 ease-out',
+                  'absolute inset-0 flex h-full w-full items-center justify-center transition-opacity'
+                )}
+                aria-hidden='true'
+              >
+                <svg
+                  className='h-3 w-3 text-chestnut-rose-600'
+                  fill='currentColor'
+                  viewBox='0 0 12 12'
+                >
+                  <path d='M3.707 5.293a1 1 0 00-1.414 1.414l1.414-1.414zM5 8l-.707.707a1 1 0 001.414 0L5 8zm4.707-3.293a1 1 0 00-1.414-1.414l1.414 1.414zm-7.414 2l2 2 1.414-1.414-2-2-1.414 1.414zm3.414 2l4-4-1.414-1.414-4 4 1.414 1.414z' />
+                </svg>
+              </span>
+            </span>
+          </Switch>
+          <span className='text-sm ml-1'>Kemarin</span>
         </div>
 
         <button
