@@ -164,7 +164,7 @@ const generate_4d_array = async ({
   let pushed_2d_number_quantity = 0
 
   for (let i = 0; i < all_bet_data_2d_string.length; i++) {
-    if (pushed_2d_number_quantity >= 15) {
+    if (pushed_2d_number_quantity >= 20) {
       break
     }
 
